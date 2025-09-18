@@ -1,0 +1,79 @@
+{
+  "nodes": [
+    {
+      "configuration": {
+        "input": {}
+      },
+      "name": "PlayerInputNode",
+      "outputs": [
+        {
+          "name": "document",
+          "type": "String"
+        }
+      ],
+      "type": "Input"
+    },
+    {
+      "configuration": {
+        "output": {}
+      },
+      "inputs": [
+        {
+          "expression": "$.data",
+          "name": "document",
+          "type": "String"
+        }
+      ],
+      "name": "PlayerResponseNode",
+      "type": "Output"
+    },
+    {
+      "configuration": {
+        "agent": {
+          "agentAliasArn": "arn:aws:bedrock:us-east-1:955063684667:agent-alias/OBFMXNRLA9/IOKTCLZG3J"
+        }
+      },
+      "inputs": [
+        {
+          "expression": "$.data",
+          "name": "agentInputText",
+          "type": "String"
+        }
+      ],
+      "name": "ClassificationAgent",
+      "outputs": [
+        {
+          "name": "agentResponse",
+          "type": "String"
+        }
+      ],
+      "type": "Agent"
+    }
+  ],
+  "connections": [
+    {
+      "configuration": {
+        "data": {
+          "sourceOutput": "document",
+          "targetInput": "agentInputText"
+        }
+      },
+      "name": "InputToClassification",
+      "source": "PlayerInputNode",
+      "target": "ClassificationAgent",
+      "type": "Data"
+    },
+    {
+      "configuration": {
+        "data": {
+          "sourceOutput": "agentResponse",
+          "targetInput": "document"
+        }
+      },
+      "name": "ClassificationToOutput",
+      "source": "ClassificationAgent",
+      "target": "PlayerResponseNode",
+      "type": "Data"
+    }
+  ]
+}
